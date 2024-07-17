@@ -1,0 +1,58 @@
+// Виды пасты - spagetti/penne/macaroni
+// Tags: Union, Enum, Narrowing
+
+enum TypePasta {
+    SPAGETTI = "spagetti",
+    PENNE = "penne",
+    MACARONI = "macaroni",
+}
+
+class Pizza {
+  constructor(
+    public hasPepperoni:boolean,
+    public hasSauce:boolean,
+    public hasCheese:boolean,
+    public bakeTime:number = 30,
+  ){}
+
+  bake(): void {
+    setTimeout(console.log, this.bakeTime, 'Enjoy your pizza!');
+  }
+}
+
+class Pasta {
+   constructor(
+    public pastaType:TypePasta,
+    public hasSauce:boolean,
+    public hasCheese:boolean,
+    public cookTime:number = 30,
+  ) {}
+
+  cook(): void {
+      setTimeout(console.log, this.cookTime, 'Enjoy your pasta!');
+  }
+}
+
+function throwError (message: string):never{
+    new Error('Unknown dish')
+}
+
+class Kitchen {
+  makeDish(dish: Pasta | Pizza| never){
+    if ('bake' in dish) {
+        dish.bake();
+        return Pasta;
+    } else if ('cook' in dish) {
+        dish.cook();
+        return Pizza;
+    } 
+    throwError('Unknown dish');
+  }
+}
+
+const kitchen = new Kitchen();
+const pizza = new Pizza(true, true, false);
+const pasta = new Pasta(TypePasta.SPAGETTI, true, true);
+
+kitchen.makeDish(pasta);
+kitchen.makeDish(pizza);
