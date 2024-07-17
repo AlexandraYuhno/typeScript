@@ -1,7 +1,11 @@
 // Возможные роли пользователя - user/moderator/admin
 // Tags: Enum, Union, Type, Interface
 
-type Role = 'user' | 'moderator' | 'admin';
+enum Role {
+  USER = 'user',
+  MODERATOR = 'moderator',
+  ADMIN = 'admin',
+}
 
 interface User {
   id: number;
@@ -12,17 +16,17 @@ interface User {
 const user: User = {
   id: 1,
   login: 'test',
-  role: 'user',
+  role: Role.USER,
 };
-  
-const checkPermissionsDecorator = (roles: Role[]) => {
-  return (user: User) => {
+
+type fn = (user: User) => boolean;
+
+const checkPermissionsDecorator = (roles: Role[]):fn => {
+  return (user: User): boolean => {
     return roles.includes(user.role);
   };
 };
   
-const checkPermission = checkPermissionsDecorator(['admin']);
+const checkPermission = checkPermissionsDecorator([Role.ADMIN]);
 const hasPermissions = checkPermission(user);
-  
-console.log(hasPermissions);
-  
+    
