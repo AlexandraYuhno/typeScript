@@ -52,19 +52,18 @@ enum TypePasta {
       throw new Error(message)
   }
   
-interface cookRoom {
-  makeDish(dish: Pasta | Pizza| never): Pasta | Pizza| never,
-  throwError ():never,
+interface CookRoom {
+  makeDish:(dish: Pasta | Pizza) => Pasta | Pizza| never,
 }
 
-  class Kitchen implements cookRoom{
-    makeDish(dish: Pasta | Pizza| never){
+  class Kitchen implements CookRoom{
+    makeDish(dish: Pasta | Pizza){
       if (dish instanceof Pizza) {
           dish.bake();
-          return Pizza;
+          return dish;
       } else if (dish instanceof Pasta) {
           dish.cook();
-          return Pasta;
+          return dish;
       } 
       throwError('Unknown dish');
     }
