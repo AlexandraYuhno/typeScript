@@ -2,77 +2,81 @@
 // Tags: Union, Enum, Narrowing
 
 enum TypePasta {
-      SPAGETTI = "spagetti",
-      PENNE = "penne",
-      MACARONI = "macaroni",
-  }
-  interface generalIngredient{
-    hasSauce:boolean,
-    hasCheese:boolean,
-  }
-  interface ingredientPizza extends generalIngredient{
-    hasPepperoni:boolean,
-    bakeTime:number,
-    bake(): void,
-  }
-
-  interface ingredientPasta extends generalIngredient{
-    pastaType:TypePasta,
-    cookTime:number,
-    cook(): void,
-  }
-
-  class Pizza implements ingredientPizza {
-    constructor(
-      public hasPepperoni:boolean,
-      public hasSauce:boolean,
-      public hasCheese:boolean,
-      public bakeTime:number = 30,
-    ){}
-  
-    bake(): void {
-      setTimeout(console.log, this.bakeTime, 'Enjoy your pizza!');
-    }
-  }
-  
-  class Pasta implements ingredientPasta{
-     constructor(
-      public pastaType:TypePasta,
-      public hasSauce:boolean,
-      public hasCheese:boolean,
-      public cookTime:number = 30,
-    ) {}
-  
-    cook(): void {
-        setTimeout(console.log, this.cookTime, 'Enjoy your pasta!');
-    }
-  }
-  
-  function throwError (message: string):never {
-      throw new Error(message)
-  }
-  
-interface CookRoom {
-  makeDish:(dish: Pasta | Pizza) => Pasta | Pizza| never,
+  SPAGETTI = "spagetti",
+  PENNE = "penne",
+  MACARONI = "macaroni",
+}
+interface GeneralIngredient {
+  hasSauce: boolean,
+  hasCheese: boolean,
+}
+interface IngredientPizza extends GeneralIngredient {
+  hasPepperoni: boolean,
+  bakeTime: number,
+  bake(): void,
 }
 
-  class Kitchen implements CookRoom{
-    makeDish(dish: Pasta | Pizza){
-      if (dish instanceof Pizza) {
-          dish.bake();
-          return dish;
-      } else if (dish instanceof Pasta) {
-          dish.cook();
-          return dish;
-      } 
-      throwError('Unknown dish');
-    }
+interface IngredientPasta extends GeneralIngredient {
+  pastaType: TypePasta,
+  cookTime: number,
+  cook(): void,
+}
+
+class Pizza implements IngredientPizza {
+  hasPepperoni;
+  hasSauce;
+  hasCheese;
+  bakeTime = 30;
+
+  constructor(hasPepperoni:boolean, hasSauce: boolean, hasCheese:boolean) {
+    this.hasPepperoni = hasPepperoni;
+    this.hasSauce = hasSauce;
+    this.hasCheese = hasCheese;
+  } 
+  bake(): void {
+    setTimeout(console.log, this.bakeTime, 'Enjoy your pizza!');
   }
-  
-  const kitchen = new Kitchen();
-  const pizza = new Pizza(true, true, false);
-  const pasta = new Pasta(TypePasta.SPAGETTI, true, true);
-  
-  kitchen.makeDish(pasta);
-  kitchen.makeDish(pizza);
-  
+}
+
+class Pasta implements IngredientPasta {
+  pastaType;
+  hasSauce;
+  hasCheese;
+  cookTime = 30;
+
+  constructor(pastaType:TypePasta, hasSauce:boolean, hasCheese:boolean) {
+      this.pastaType = pastaType;
+      this.hasCheese = hasCheese;
+      this.hasSauce = hasSauce;
+  }
+
+  cook(): void {
+    setTimeout(console.log, this.cookTime, 'Enjoy your pasta!');
+  }
+}
+
+type Foot = Pasta | Pizza;
+
+interface CookRoom {
+  makeDish: (dish: Foot) => Foot | never,
+}
+
+class Kitchen implements CookRoom {
+  makeDish(dish: Foot): Foot | never {
+    if (dish instanceof Pizza) {
+      dish.bake();
+      return dish;
+    } else if (dish instanceof Pasta) {
+      dish.cook();
+      return dish;
+    }
+    throw new Error('Unknown dish');;
+  }
+}
+
+const kitchen = new Kitchen();
+const pizza = new Pizza(true, true, false);
+const pasta = new Pasta(TypePasta.SPAGETTI, true, true);
+
+kitchen.makeDish(pasta);
+kitchen.makeDish(pizza);
