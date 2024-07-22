@@ -6,10 +6,12 @@ enum TypePasta {
   PENNE = "penne",
   MACARONI = "macaroni",
 }
+
 interface GeneralIngredient {
   hasSauce: boolean,
   hasCheese: boolean,
 }
+
 interface IngredientPizza extends GeneralIngredient {
   hasPepperoni: boolean,
   bakeTime: number,
@@ -23,10 +25,10 @@ interface IngredientPasta extends GeneralIngredient {
 }
 
 class Pizza implements IngredientPizza {
-  hasPepperoni;
-  hasSauce;
-  hasCheese;
-  bakeTime = 30;
+  hasPepperoni: boolean;
+  hasSauce: boolean;
+  hasCheese: boolean;
+  bakeTime: number = 30;
 
   constructor(hasPepperoni:boolean, hasSauce: boolean, hasCheese:boolean) {
     this.hasPepperoni = hasPepperoni;
@@ -39,10 +41,10 @@ class Pizza implements IngredientPizza {
 }
 
 class Pasta implements IngredientPasta {
-  pastaType;
-  hasSauce;
-  hasCheese;
-  cookTime = 30;
+  pastaType: TypePasta;
+  hasSauce: boolean;
+  hasCheese: boolean;
+  cookTime: number = 30;
 
   constructor(pastaType:TypePasta, hasSauce:boolean, hasCheese:boolean) {
       this.pastaType = pastaType;
@@ -55,14 +57,14 @@ class Pasta implements IngredientPasta {
   }
 }
 
-type Foot = Pasta | Pizza;
+type Food = Pasta | Pizza;
 
 interface CookRoom {
-  makeDish: (dish: Foot) => Foot | never,
+  makeDish: (dish: Food) => Food | never,
 }
 
 class Kitchen implements CookRoom {
-  makeDish(dish: Foot): Foot | never {
+  makeDish(dish: Food): Food | never {
     if (dish instanceof Pizza) {
       dish.bake();
       return dish;
