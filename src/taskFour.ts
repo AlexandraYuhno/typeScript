@@ -1,5 +1,7 @@
-const flattenConstructor = <T,>() => {
-  return (dict: Record<string, T>):T[]=> Object.values(dict);
+type FlatFunction<T> = (dict: Record<string, T>) => T[];
+
+const flattenConstructor = <T, >(): FlatFunction<T> => {
+  return (dict) => Object.values(dict);
 };
 
 const flat1 = flattenConstructor<number>();
@@ -9,4 +11,3 @@ console.log(r1);
 const flat2 = flattenConstructor<string>();
 const r2 = flat2({ a: '1', b: '2' });
 console.log(r2);
-
