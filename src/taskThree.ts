@@ -1,9 +1,9 @@
 // Tags: Generic, Union
 
 class Queue<T> {
-  tasks: T[] = [];
+  public tasks: T[] = [];
 
-  delay:number = 10;
+  private delay:number = 10;
 
   runQueue():void {
     setTimeout(() => this.doJob(), this.delay);
@@ -17,7 +17,7 @@ class Queue<T> {
     this.runQueue();
   }
 
-  addJob(task:T):string | number{
+  addJob(task:T): number{
     return this.tasks.push(task);
   }
 
@@ -30,20 +30,19 @@ class Queue<T> {
     }
 }
 
-class Task {
-  value: string | number;
+class Task<K = string | number> {
+  value: K;
 
-  constructor(value: string | number) {
+  constructor(value: K) {
     this.value = value;
   }
 }
 
 const queue = new Queue<Task>();
-const task1 = new Task('task#1');
-const task2 = new Task(1);
+const task1 = new Task<string>('task#1');
+const task2 = new Task<number>(1);
 
 queue.jobDelay = 1000;
-
 queue.addJob(task1);
 queue.addJob(task2);
 
