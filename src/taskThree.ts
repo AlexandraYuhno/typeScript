@@ -5,11 +5,11 @@ class Queue<T> {
 
   private delay:number = 10;
 
-  runQueue():void {
+  private runQueue():void {
     setTimeout(() => this.doJob(), this.delay);
   }
 
-  doJob():void {
+  private doJob():void {
     const task = this.tasks.shift();
     if (task != null) {
       console.log(task);
@@ -17,28 +17,29 @@ class Queue<T> {
     this.runQueue();
   }
 
-  addJob(task:T): number{
+  public addJob(task:T): number{
     return this.tasks.push(task);
   }
 
-  run():void {
+  public run():void {
     this.runQueue();
   }
 
-  set jobDelay(time:number){
+  public set jobDelay(time:number){
     this.delay = time;
     }
 }
 
-class Task<K = string | number> {
-  value: K;
+type TaskValue = string | number;
 
+class Task<K> {
+  value: K;
   constructor(value: K) {
     this.value = value;
   }
 }
 
-const queue = new Queue<Task>();
+const queue = new Queue<Task<TaskValue>>();
 const task1 = new Task<string>('task#1');
 const task2 = new Task<number>(1);
 
